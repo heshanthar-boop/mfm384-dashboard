@@ -195,11 +195,22 @@ function _startListeners() {
     _updateKPIs();
     _updateLastSeen();
   }, err => {
-    console.warn('meters listener:', err);
+    console.warn('meters listener:', err.code, err.message);
+    let msg, hint;
+    if (err.code === 'permission-denied') {
+      msg  = 'Permission denied.';
+      hint = 'Firestore rules not updated yet — paste the security rules in the Firebase console and publish.';
+    } else if (err.code === 'unauthenticated') {
+      msg  = 'Not signed in.';
+      hint = 'Sign in with Google first.';
+    } else {
+      msg  = `Error: ${err.code || err.message}`;
+      hint = 'Check site ID and Firestore rules.';
+    }
     document.getElementById('meter-grid').innerHTML =
       `<div style="padding:40px;color:var(--danger);text-align:center">
-        &#9888; Could not load data for site <strong>${_siteId}</strong>.<br>
-        <span style="color:var(--muted);font-size:0.82rem">Check site ID or Firestore rules.</span>
+        &#9888; ${msg}<br>
+        <span style="color:var(--muted);font-size:0.82rem">${hint}</span>
       </div>`;
   });
 
