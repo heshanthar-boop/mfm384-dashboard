@@ -1,7 +1,7 @@
 {
-  "name": "Power Monitor Live",
-  "short_name": "PowerMonitor",
-  "description": "Live power meter dashboard — MFM384 SCADA",
+  "name": "Power Monitoring v3",
+  "short_name": "PowerMon v3",
+  "description": "Live power meter dashboard — Power Monitoring v3 SCADA",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0d1117",

@@ -1,25 +1,27 @@
-# Power Monitor Web Dashboard — Setup Guide
+# Power Monitoring v3 — Web Dashboard Setup Guide
 
 ## Architecture
 
 ```
-MFM384 meter → RS485 → PC running app.py
+Energy Meter → RS485 → PC running app.py (Power Monitoring v3)
                               ↓ firebase-admin (Python)
                         Firebase Firestore (cloud)
                               ↓ real-time listener
                         Any browser anywhere
 ```
 
+Live URL: **https://heshanthar-boop.github.io/power-monitoring-dashboard/**
+
 ---
 
 ## Step 1 — Generate Firebase service account key
 
-1. Go to console.firebase.google.com → select solarpv-field-tool project
+1. Go to console.firebase.google.com → select your project
 2. Click gear icon → **Project Settings**
 3. Click **Service accounts** tab
 4. Click **Generate new private key** → **Generate key**
 5. Save the downloaded file as **firebase_key.json**
-6. Place it in the same folder as app.py (D:\claude\mfm384-scada\)
+6. Place it in the same folder as app.py
 
 > Keep this file SECRET. Anyone with it has full write access to your Firestore.
 > Never commit it to GitHub.
@@ -36,7 +38,7 @@ pip install firebase-admin
 
 ## Step 3 — Enable Firebase in config.json
 
-Open your config.json (in %APPDATA%\PowerMonitoringReporting\) and add/edit:
+Open your config.json (in `%APPDATA%\PowerMonitoringReporting\`) and add/edit:
 
 ```json
 "firebase": {
@@ -60,7 +62,6 @@ Go to Firebase console → Firestore → **Rules** tab and replace with:
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // User private data (HydroInspect, SolarPV)
     match /users/{userId}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
@@ -79,7 +80,7 @@ Click **Publish**.
 
 ## Step 5 — Run app.py
 
-Start the SCADA app normally. If firebase_key.json is present and enabled=true,
+Start the SCADA app normally. If firebase_key.json is present and `enabled: true`,
 you will see in the log:
 
 ```
@@ -89,25 +90,9 @@ FirebasePublisher started — site_id=site_01, interval=30s
 
 ---
 
-## Step 6 — Host the web dashboard
+## Step 6 — Open the dashboard
 
-### Option A: GitHub Pages (recommended — free, permanent)
-- Push the web-dashboard/ folder to a GitHub repo
-- Enable Pages from main branch
-- Share the URL — anyone can sign in and view live data
-
-### Option B: Local server (LAN only)
-```
-cd D:\claude\mfm384-scada\web-dashboard
-py -m http.server 8095
-```
-Open: http://localhost:8095
-
----
-
-## Step 7 — Open the dashboard
-
-- Open the dashboard URL in any browser
+- Open: https://heshanthar-boop.github.io/power-monitoring-dashboard/
 - Sign in with Google
 - Enter the site_id you set in config.json (default: site_01)
 - Click **Connect**

@@ -1,5 +1,5 @@
 /**
- * dashboard.js — Live Power Monitor Web Dashboard
+ * dashboard.js — Power Monitoring v3 Live Web Dashboard
  * Connects to Firebase Firestore, listens for real-time meter updates.
  * Keys match the canonical short keys pushed by firebase_publisher.py
  */
@@ -122,7 +122,7 @@ function _renderSignInPrompt() {
   _stopListeners();
   document.getElementById('app').innerHTML = `
     <div id="signin-prompt">
-      <h2>&#9889; Power Monitor Live Dashboard</h2>
+      <h2>&#9889; Power Monitoring v3 — Live Dashboard</h2>
       <p>Sign in with your Google account to view live meter data.</p>
       <button onclick="_signIn()">Sign in with Google</button>
     </div>
